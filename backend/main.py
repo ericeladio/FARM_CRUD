@@ -1,5 +1,6 @@
-from fastapi import FastAPI
-from database import get_all_tasks
+from fastapi import FastAPI, HTTPException
+from database import get_all_tasks, create_task, get_one_task
+from models import Task
 
 app = FastAPI()
 
@@ -8,12 +9,19 @@ def welcome():
     return {"message": "Hello World"}
 
 @app.get('/api/tasks')
-def get_tasks():
-    return {"message": "tasks"}
-
-@app.post('/api/tasks')
-def create_task():
-    return {"message": "tasks"}
+async def get_tasks():
+    taks = get_all_tasks()
+    return taks
+@app.post('/api/tasks', response_model=Task)
+async def save_task(task:Task):
+    task_found = await get_one_task(task.title)
+    if task_found:
+        raise HTTPException(status_code=400, detail="Task already exists")
+    response = await create_task(task.dict())
+    if response:
+        return {"message": "task created"}
+    else:
+        raise HTTPException(status_code=400, detail="Bad request")
 
 @app.get('/api/task/{id}')
 def get_task():
