@@ -10,19 +10,21 @@ def welcome():
 
 @app.get('/api/tasks')
 async def get_tasks():
-    taks = get_all_tasks()
+    taks = await get_all_tasks()
     return taks
+
 @app.post('/api/tasks', response_model=Task)
 async def save_task(task:Task):
     task_found = await get_one_task(task.title)
     if task_found:
         raise HTTPException(status_code=400, detail="Task already exists")
     response = await create_task(task.dict())
+    print(response)
     if response:
-        return {"message": "task created"}
+        return  response
     else:
         raise HTTPException(status_code=400, detail="Bad request")
-
+    
 @app.get('/api/task/{id}')
 def get_task():
     return {"message": "tasks"}
@@ -31,7 +33,7 @@ def get_task():
 def update_task():
     return {"message": "tasks"}
 
-@app.detele('/api/task/{id}')
+@app.delete('/api/task/{id}')
 def delete_task():
     return {"message": "tasks"}
 
