@@ -11,7 +11,11 @@ const handleSubmit = async(e) => {
       title,
       description
     }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
 })
+}
 
 function TaskForm() {
   return (
