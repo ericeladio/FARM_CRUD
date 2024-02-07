@@ -1,5 +1,6 @@
 import { useEffect, useState} from "react"
-import axios from "axios"
+import TaksList from "../components/TaksList"
+import { getAllTasks } from "../api/tasks"
 
 function Home() {
 
@@ -7,22 +8,14 @@ function Home() {
 
    useEffect(() => {
     async function fetchTasks() {
-      const res = await axios.get('http://localhost:8000/api/tasks')
+      const res = await getAllTasks()
       setTasks(res.data)
       console.log(res.data)
     }
     fetchTasks()  
   },[])
   return (
-    <>
-      <h1 className='text-3xl font-bolddd'>Home</h1>
-      {tasks.map((task) => (
-        <div key={task.id}>
-          <h1>{task.title}</h1>
-          <p>{task.description}</p>
-        </div>
-      ))}
-    </>
+      <TaksList tasks={tasks} />
   )
 }
 
