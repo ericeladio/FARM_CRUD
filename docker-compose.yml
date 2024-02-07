@@ -17,6 +17,14 @@ services:
       - 27017:27017
     volumes:
       - taskdb:/data/db
+  vite_docker:
+    image: image-vite-react
+    build: ./client
+    container_name: react-aplication
+    ports:
+      - 5173:5173
+    depends_on:
+      - fastapi
 
 
 volumes:
