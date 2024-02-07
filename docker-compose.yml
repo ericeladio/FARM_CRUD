@@ -1,0 +1,31 @@
+version : "3"
+
+services:
+  fastapi:
+    image: image-fastapi
+    build: ./backend
+    container_name: fastapi-aplication
+    ports:
+      - 8000:8000
+    environment:
+      - DB_URL=mongodb://db/
+    depends_on:
+      - db
+  db:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - taskdb:/data/db
+  vite_docker:
+    image: image-vite-react
+    build: ./client
+    container_name: react-aplication
+    ports:
+      - 5173:5173
+    depends_on:
+      - fastapi
+
+
+volumes:
+    taskdb:
