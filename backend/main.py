@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from routes.task import task
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.responses import RedirectResponse
 
 
 app = FastAPI()
@@ -14,6 +15,9 @@ app.add_middleware(
 
 @app.get('/')
 def welcome():
-    return {"message": "Hello World"}
+    return {
+        RedirectResponse('/docs')
+    }
+
 
 app.include_router(task)
